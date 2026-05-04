@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Match Laboral | Reclutamiento y Selección</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    :root{
+      --bg:#f7f9fc;--card:#ffffff;--text:#172033;--muted:#64748b;--line:#e2e8f0;
+      --blue:#1d4ed8;--blue2:#2563eb;--pink:#ec4899;--green:#16a34a;--shadow:0 18px 45px rgba(15,23,42,.10);
+      --radius:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+    a{text-decoration:none;color:inherit}
+    header{background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 62%,#ec4899 100%);color:white;padding:26px 7vw 80px;position:relative;overflow:hidden}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1180px;margin:0 auto 72px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:20px}
+    .logo{width:44px;height:44px;border-radius:14px;background:white;color:var(--blue);display:grid;place-items:center;font-weight:900;box-shadow:0 10px 25px rgba(0,0,0,.18)}
+    .nav-links{display:flex;gap:18px;font-size:14px;color:#e0e7ff}
+    .hero{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.08fr .92fr;gap:48px;align-items:center}
+    .badge{display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);padding:8px 12px;border-radius:999px;font-size:13px;margin-bottom:18px}
+    h1{font-size:clamp(38px,5vw,64px);line-height:1.02;letter-spacing:-.04em;margin-bottom:18px}
+    .hero p{font-size:18px;color:#dbeafe;max-width:640px;margin-bottom:28px}
+    .actions{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{border:0;border-radius:14px;padding:14px 20px;font-weight:800;cursor:pointer;font-size:15px;display:inline-flex;align-items:center;gap:8px;transition:.18s}
+    .btn-primary{background:white;color:#1d4ed8}.btn-primary:hover{transform:translateY(-1px);box-shadow:0 10px 26px rgba(255,255,255,.16)}
+    .btn-secondary{background:rgba(255,255,255,.12);color:white;border:1px solid rgba(255,255,255,.26)}
+    .hero-card{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:24px;padding:26px;backdrop-filter:blur(12px);box-shadow:var(--shadow)}
+    .hero-card h3{font-size:20px;margin-bottom:14px}.mini-list{display:grid;gap:12px}.mini{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:14px}.mini strong{display:block}.mini span{font-size:13px;color:#dbeafe}
+    main{max-width:1180px;margin:-42px auto 0;padding:0 24px 50px;position:relative}
+    .section{margin-bottom:34px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+    .card-icon{font-size:28px;margin-bottom:12px}.card h3{font-size:18px;margin-bottom:8px}.card p{color:var(--muted);font-size:14px}
+    .split{display:grid;grid-template-columns:.9fr 1.1fr;gap:22px;align-items:start}.section-title{font-size:30px;letter-spacing:-.03em;margin-bottom:10px}.section-sub{color:var(--muted);margin-bottom:18px}
+    form{display:grid;gap:14px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.fg{display:flex;flex-direction:column;gap:6px}.fg.full{grid-column:1/-1}
+    label{font-size:13px;font-weight:700;color:#334155}input,select,textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;font:inherit;background:#f8fafc;color:var(--text)}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue2);background:white}textarea{min-height:98px;resize:vertical}
+    .note{font-size:12px;color:var(--muted)}.success{display:none;background:#dcfce7;color:#166534;border-left:4px solid var(--green);padding:12px 14px;border-radius:12px;font-size:14px;font-weight:600}.error{display:none;background:#fee2e2;color:#991b1b;border-left:4px solid #dc2626;padding:12px 14px;border-radius:12px;font-size:14px;font-weight:600}
+    .admin-box{background:#0f172a;color:white;border-radius:var(--radius);padding:24px}.admin-box p{color:#cbd5e1;font-size:14px;margin:8px 0 16px}.admin-list{display:grid;gap:10px}.admin-list div{padding:12px;border-radius:12px;background:rgba(255,255,255,.08);font-size:14px}
+    footer{text-align:center;padding:28px;color:var(--muted);font-size:13px}
+    @media(max-width:850px){.hero,.split,.grid3,.form-grid{grid-template-columns:1fr}.nav-links{display:none}header{padding-bottom:64px}.hero-card{display:none}main{padding-inline:16px}}
+  </style>
+</head>
+<body>
+<header>
+  <nav class="nav">
+    <div class="brand"><div class="logo">ML</div><span>Match Laboral</span></div>
+    <div class="nav-links"><a href="#postula">Postular</a><a href="#empresas">Empresas</a><a href="#servicios">Servicios</a></div>
+  </nav>
+  <section class="hero">
+    <div>
+      <div class="badge">💼 Reclutamiento y selección de personal</div>
+      <h1>Conectamos personas con oportunidades laborales reales.</h1>
+      <p>En Match Laboral ayudamos a candidatos a postular y a empresas a encontrar personal operativo, administrativo y de apoyo para sus procesos.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#postula">Postula aquí</a>
+        <a class="btn btn-secondary" href="#empresas">Soy empresa</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <h3>¿Qué hacemos?</h3>
+      <div class="mini-list">
+        <div class="mini"><strong>Base de candidatos</strong><span>Recepción y organización de postulantes.</span></div>
+        <div class="mini"><strong>Filtro curricular</strong><span>Revisión de experiencia, disponibilidad y cargo objetivo.</span></div>
+        <div class="mini"><strong>Apoyo a empresas</strong><span>Preselección para cargos masivos o específicos.</span></div>
+      </div>
+    </div>
+  </section>
+</header>
+
+<main>
+  <section class="section grid3" id="servicios">
+    <div class="card"><div class="card-icon">📄</div><h3>Postulación simple</h3><p>Los candidatos dejan sus datos, cargo de interés, experiencia y CV en un formulario claro.</p></div>
+    <div class="card"><div class="card-icon">🔎</div><h3>Preselección</h3><p>Filtro inicial de antecedentes, experiencia laboral, disponibilidad y ubicación.</p></div>
+    <div class="card"><div class="card-icon">🤝</div><h3>Conexión laboral</h3><p>Presentación de candidatos a empresas que buscan personal para sus procesos.</p></div>
+  </section>
+
+  <section class="section split">
+    <div class="admin-box" id="empresas">
+      <h2>Para empresas</h2>
+      <p>Apoyamos procesos de reclutamiento con foco en rapidez, orden y trazabilidad.</p>
+      <div class="admin-list">
+        <div>✅ Filtro de CV y datos de contacto</div>
+        <div>✅ Base de candidatos por cargo y ciudad</div>
+        <div>✅ Preselección para cargos operativos y administrativos</div>
+        <div>✅ Reporte de candidatos disponibles</div>
+      </div>
+    </div>
+
+    <div class="card" id="postula">
+      <h2 class="section-title">Postula con Match Laboral</h2>
+      <p class="section-sub">Completa tus datos y quedarás en nuestra base para futuras oportunidades.</p>
+
+      <div id="ok" class="success">✅ Postulación enviada correctamente. Pronto revisaremos tus datos.</div>
+      <div id="err" class="error">❌ No se pudo enviar la postulación. Revisa los datos e intenta nuevamente.</div>
+
+      <form id="formPostulacion">
+        <div class="form-grid">
+          <div class="fg"><label>Nombre completo</label><input name="nombre" required placeholder="Ej: Camila Pérez Soto"></div>
+          <div class="fg"><label>RUT</label><input name="rut" required placeholder="Ej: 12.345.678-9"></div>
+          <div class="fg"><label>Teléfono / WhatsApp</label><input name="telefono" required placeholder="Ej: +56 9 1234 5678"></div>
+          <div class="fg"><label>Correo</label><input name="correo" type="email" placeholder="correo@ejemplo.com"></div>
+          <div class="fg"><label>Ciudad</label><input name="ciudad" required placeholder="Ej: Puerto Montt"></div>
+          <div class="fg"><label>Cargo de interés</label><select name="cargo" required><option value="">Selecciona</option><option>Operario/a de producción</option><option>Administrativo/a</option><option>Asistente RRHH</option><option>Bodega / logística</option><option>Aseo industrial</option><option>Otro</option></select></div>
+          <div class="fg full"><label>Experiencia laboral</label><textarea name="experiencia" placeholder="Cuéntanos brevemente tu experiencia, disponibilidad y último trabajo."></textarea></div>
+          <div class="fg full"><label>Link de CV o LinkedIn</label><input name="cv_url" placeholder="Pega un link de Google Drive, LinkedIn o similar"></div>
+        </div>
+        <p class="note">Al enviar este formulario autorizas a Match Laboral a contactarte por oportunidades laborales.</p>
+        <button class="btn btn-primary" type="submit">Enviar postulación</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>© 2026 Match Laboral · Reclutamiento y selección</footer>
+
+<script>
+// OPCIONAL: conecta Supabase reemplazando estos valores.
+const SUPABASE_URL = ""; // Ej: https://xxxx.supabase.co
+const SUPABASE_KEY = ""; // sb_publishable_...
+let supabaseClient = null;
+if (SUPABASE_URL && SUPABASE_KEY) {
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
+
+const form = document.getElementById('formPostulacion');
+const ok = document.getElementById('ok');
+const err = document.getElementById('err');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  ok.style.display = 'none';
+  err.style.display = 'none';
+
+  const fd = new FormData(form);
+  const candidato = {
+    nombre: fd.get('nombre'),
+    rut: fd.get('rut'),
+    telefono: fd.get('telefono'),
+    correo: fd.get('correo'),
+    ciudad: fd.get('ciudad'),
+    cargo: fd.get('cargo'),
+    experiencia: fd.get('experiencia'),
+    cv_url: fd.get('cv_url'),
+    estado: 'Nuevo'
+  };
+
+  try {
+    if (supabaseClient) {
+      const { error } = await supabaseClient.from('candidatos').insert([candidato]);
+      if (error) throw error;
+    } else {
+      const guardados = JSON.parse(localStorage.getItem('match_laboral_candidatos') || '[]');
+      guardados.push({ ...candidato, fecha: new Date().toISOString() });
+      localStorage.setItem('match_laboral_candidatos', JSON.stringify(guardados));
+    }
+    form.reset();
+    ok.style.display = 'block';
+    ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch (e) {
+    console.error(e);
+    err.style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>
